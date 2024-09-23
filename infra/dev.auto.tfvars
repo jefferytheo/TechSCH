@@ -1,1 +1,0 @@
-ecr_repository_name = "capstone_ecr"
