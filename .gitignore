@@ -11,3 +11,15 @@ settings.json
 .idea
 
 static/
+
+infra/.terraform/
+infra/*.terraform
+infra/.terraform.lock.hcl
+infra/.terraform.tfstate
+infra/.terraform.tfstate.backup
+
+# Terraform
+
+*.tfstate
+.terraform/
+*.hcl

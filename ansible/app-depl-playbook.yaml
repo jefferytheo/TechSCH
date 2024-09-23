@@ -1,0 +1,67 @@
+---
+
+- name: Update repo and dependencies
+  hosts: all
+  become: yes
+  tasks:
+
+  - name: Update apt cache
+    apt: 
+      update_cache: yes
+      upgrade: yes
+
+
+- name: Install docker dependencies
+  hosts: all
+  become: yes
+  tasks:
+
+  - name: Install Docker dependencies
+    apt:
+      name:
+        - ca-certificates
+        - curl
+    register: dependencies
+
+
+- name: Docker Installation
+  hosts: all
+  become: true
+  tasks:
+
+    - name: Create keyrings directory
+      file:
+        path: /etc/apt/keyrings
+        state: directory
+
+
+    - name: Add Docker GPG Key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+
+    - name: Configure Docker repository
+      apt_repository:
+        repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+        state: present
+
+
+    - name: Install Docker and other dependencies
+      apt:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-buildx-plugin
+          - docker-compose-plugin
+        state: present
+
+
+    - name: Deploy docker container
+      docker_container:
+        name: easy-school
+        image: adeoluadeyemi/easy-school:1.0.1
+        ports:
+          - '80:80'
+
